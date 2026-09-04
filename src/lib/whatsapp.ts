@@ -68,3 +68,13 @@ export function rewearHandoverMessage(input: {
     "Ready to hand over the pair.",
   ].join("\n");
 }
+
+export function nearPlaceMessage(place: string): string {
+  return [
+    `FOUND — ${place.toUpperCase()}.`,
+    "Niko looking near here.",
+    "Size? Budget? Vibe?",
+    "",
+    "Sayari finds the pair.",
+  ].join("\n");
+}

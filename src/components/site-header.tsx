@@ -33,16 +33,19 @@ export async function SiteHeader() {
             <Link href="/rail" className="hover:text-nairobi">
               Rail
             </Link>
-            <Link href="/find" className="hover:text-nairobi">
+            <Link href="/found" className="hover:text-nairobi">
+              Found
+            </Link>
+            <Link href="/find" className="hidden hover:text-nairobi sm:inline">
               Find
             </Link>
             <Link
               href="/shoeholics"
-              className="hidden hover:text-nairobi sm:inline"
+              className="hidden hover:text-nairobi md:inline"
             >
               Shoeholics
             </Link>
-            <Link href="/rewear" className="hidden hover:text-nairobi md:inline">
+            <Link href="/rewear" className="hidden hover:text-nairobi lg:inline">
               ReWear
             </Link>
             {profile ? (

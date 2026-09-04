@@ -9,6 +9,7 @@ export const metadata = {
 
 const VOCAB = [
   "FOUND",
+  "THE SAYARI MAP",
   "RAIL",
   "SIZE",
   "GRADE",
@@ -33,7 +34,11 @@ export default function BrandPage() {
           </h1>
           <p className="mt-4 max-w-xl text-sm leading-7 text-muted">
             Paper + ink + photography + accent. 70% editorial. 30% thrift
-            street. Nairobi as source, not decoration.
+            street. Nairobi as source, not decoration. Provenance lives on{" "}
+            <Link href="/found" className="underline hover:text-nairobi">
+              The Sayari Map
+            </Link>
+            .
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Logo variant="mark" className="h-10 w-auto" />

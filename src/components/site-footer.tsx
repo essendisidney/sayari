@@ -23,6 +23,11 @@ export function SiteFooter() {
           </p>
           <ul className="mt-4 space-y-2 text-sm text-bone/80">
             <li>
+              <Link href="/found" className="hover:text-tag">
+                The Sayari Map
+              </Link>
+            </li>
+            <li>
               <Link href="/rail" className="hover:text-tag">
                 The Rail
               </Link>

@@ -156,23 +156,30 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* 4. FOUND IN NAIROBI */}
+      {/* 4. FOUND IN NAIROBI — map tease */}
       <section className="border-b border-ink bg-ink text-bone">
         <div className="mx-auto max-w-[1440px] px-5 py-12 sm:px-10 sm:py-14">
-          <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-tag">
-            Provenance
-          </p>
-          <h2 className="mt-3 font-display text-4xl uppercase tracking-wide sm:text-5xl">
-            Found in Nairobi
-          </h2>
-          <p className="mt-3 max-w-md text-sm leading-6 text-bone/65">
-            Every pair has a place it came from. Tap a neighbourhood.
-          </p>
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-tag">
+                Provenance
+              </p>
+              <h2 className="mt-3 font-display text-4xl uppercase tracking-wide sm:text-5xl">
+                Found in Nairobi
+              </h2>
+              <p className="mt-3 max-w-md text-sm leading-6 text-bone/65">
+                Every pair has a place it came from. Open the Sayari Map.
+              </p>
+            </div>
+            <Link href="/found" className="sayari-btn-tag !bg-tag">
+              Open the map →
+            </Link>
+          </div>
           <div className="mt-8 grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 lg:grid-cols-5">
             {FOUND_PLACES.map((place) => (
               <Link
                 key={place}
-                href={`/rail?found=${encodeURIComponent(place)}`}
+                href={`/found?place=${encodeURIComponent(place)}`}
                 className="border border-bone/25 px-3 py-4 transition hover:border-tag hover:bg-bone/5 sm:px-4 sm:py-5"
               >
                 <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-tag">
