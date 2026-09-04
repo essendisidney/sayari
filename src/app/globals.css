@@ -185,6 +185,7 @@ body::before {
 }
 
 .rail-tag {
+  position: relative;
   background: var(--bone);
   border: 1.5px solid var(--ink);
   box-shadow: 3px 3px 0 rgba(23, 23, 23, 0.12);
@@ -264,4 +265,9 @@ body::before {
 
 .rise-delay-3 {
   animation-delay: 0.34s;
+}
+
+.brand-frame {
+  border: 1.5px solid var(--ink);
+  box-shadow: 4px 4px 0 rgba(23, 23, 23, 0.12);
 }

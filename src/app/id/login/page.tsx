@@ -8,11 +8,11 @@ export const dynamic = "force-dynamic";
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ phone?: string }>;
+  searchParams: Promise<{ phone?: string; next?: string }>;
 }) {
   const profile = await getCurrentProfile();
-  if (profile) redirect("/id");
-  const { phone = "" } = await searchParams;
+  const { phone = "", next = "/id" } = await searchParams;
+  if (profile) redirect(next.startsWith("/") ? next : "/id");
 
   return (
     <main className="flex-1">
@@ -26,7 +26,12 @@ export default async function LoginPage({
           Same number you joined with. Closet, wishlist, ReWear credit.
         </p>
         <div className="mt-10">
-          <OtpForm phone={phone} lockPhone={Boolean(phone)} joinHint />
+          <OtpForm
+            phone={phone}
+            lockPhone={Boolean(phone)}
+            joinHint
+            nextPath={next.startsWith("/") ? next : "/id"}
+          />
         </div>
       </div>
     </main>

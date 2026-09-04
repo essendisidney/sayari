@@ -52,13 +52,31 @@ export function IdentityDesk({ initial }: { initial: IdentityPayload }) {
         <p className="mt-1 text-sm text-muted">
           {profile.foundingTier} · #{profile.foundingNumber} · {profile.maskedPhone}
         </p>
-        <dl className="mt-8 grid gap-6 sm:grid-cols-4">
+        <dl className="mt-8 grid gap-6 sm:grid-cols-5">
           <Stat label="Size" value={String(profile.shoeSize)} />
+          <Stat
+            label="Credit"
+            value={`KES ${(profile.creditKes ?? 0).toLocaleString("en-KE")}`}
+          />
           <Stat label="Points" value={String(profile.points)} />
           <Stat label="Closet" value={String(profile.closetCount)} />
-          <Stat label="Wishlist" value={String(profile.wishlistCount)} />
+          <Stat
+            label="Alerts"
+            value={String(profile.unreadNotifications ?? 0)}
+          />
         </dl>
         <p className="mt-6 text-sm leading-6 text-muted">{insight}</p>
+        <div className="mt-4 flex flex-wrap gap-3">
+          <a href="/rewear" className="sayari-btn-tag !px-3 !py-2">
+            ReWear a pair
+          </a>
+          <a href="/orders" className="sayari-btn-ghost !px-3 !py-2">
+            My orders
+          </a>
+          <a href="/find" className="sayari-btn-ghost !px-3 !py-2">
+            Find with credit
+          </a>
+        </div>
         <div className="mt-4 flex flex-wrap gap-2">
           {profile.categories.map((category) => (
             <span key={category} className="border border-line px-3 py-1 text-xs">

@@ -24,9 +24,17 @@ const ticket = Space_Mono({
 export const metadata: Metadata = {
   title: "Sayari — Found in Nairobi. Worn everywhere.",
   description:
-    "Nairobi's thrifted shoe rail. Pre-loved sneakers, loafers, boots — properly checked, priced in KES. One pair only.",
+    "Nairobi's curated second-hand fashion marketplace — starting with shoes. One pair. One story. One new home.",
+  applicationName: "Sayari",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    title: "Sayari",
+    statusBarStyle: "default",
+  },
   icons: {
     icon: "/sayari-mark.png",
+    apple: "/sayari-mark.png",
   },
 };
 

@@ -60,6 +60,12 @@ export const POINT_AWARDS = {
   wishlist: 10,
   gender: 10,
   find: 5,
+  rewearSubmit: 20,
+  rewearCredit: 40,
+  reserve: 10,
+  purchase: 50,
+  spotted: 15,
+  spottedVote: 2,
 } as const;
 
 export const FOUNDING_CAP = 500;

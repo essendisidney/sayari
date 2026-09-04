@@ -8,9 +8,15 @@ type Props = {
   phone?: string;
   lockPhone?: boolean;
   joinHint?: boolean;
+  nextPath?: string;
 };
 
-export function OtpForm({ phone = "", lockPhone = false, joinHint = false }: Props) {
+export function OtpForm({
+  phone = "",
+  lockPhone = false,
+  joinHint = false,
+  nextPath = "/id",
+}: Props) {
   const router = useRouter();
   const [number, setNumber] = useState(phone);
   const [code, setCode] = useState("");
@@ -57,7 +63,7 @@ export function OtpForm({ phone = "", lockPhone = false, joinHint = false }: Pro
       if (!response.ok) {
         throw new Error(payload.error ?? "Could not verify that.");
       }
-      router.push("/id");
+      router.push(nextPath.startsWith("/") ? nextPath : "/id");
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not verify that.");

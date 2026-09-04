@@ -58,6 +58,7 @@ export async function POST(request: Request) {
     colours,
     notes,
     matchLine,
+    creditKes: profile?.creditKes ?? 0,
   });
 
   return NextResponse.json({

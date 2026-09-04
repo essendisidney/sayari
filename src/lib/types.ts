@@ -25,6 +25,7 @@ export type Profile = {
   foundingNumber: number;
   foundingTier: string;
   points: number;
+  creditKes: number;
   phoneVerifiedAt: string | null;
   createdAt: string;
   updatedAt: string;
@@ -120,6 +121,122 @@ export type FindRequest = {
   createdAt: string;
 };
 
+export type RewearStatus =
+  | "OFFERED"
+  | "ACCEPTED"
+  | "INTAKE"
+  | "CREDITED"
+  | "DECLINED"
+  | "CANCELLED";
+
+export type RewearSubmission = {
+  id: string;
+  profileId: string;
+  closetItemId: string | null;
+  brand: string;
+  model: string;
+  size: number;
+  category: string;
+  gradeId: string;
+  gradeLabel: string;
+  gradeScore: string;
+  usage: ClosetUsage | null;
+  foundNeighbourhood: string;
+  imageUrl: string;
+  notes: string;
+  estimatedValueKes: number;
+  creditKes: number;
+  resaleKes: number;
+  status: RewearStatus;
+  railId: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type CreditEvent = {
+  id: string;
+  profileId: string;
+  amount: number;
+  reason: string;
+  rewearId: string | null;
+  orderId?: string | null;
+  createdAt: string;
+};
+
+export type OrderStatus =
+  | "RESERVED"
+  | "PAID"
+  | "READY"
+  | "COLLECTED"
+  | "CANCELLED"
+  | "EXPIRED";
+
+export type PaymentMethod = "CREDIT" | "MPESA" | "MIXED" | "NONE";
+
+export type Order = {
+  id: string;
+  code: string;
+  profileId: string;
+  railId: string;
+  brand: string;
+  model: string;
+  size: number;
+  image: string;
+  priceKes: number;
+  creditApplied: number;
+  mpesaDue: number;
+  mpesaRef: string | null;
+  paymentMethod: PaymentMethod;
+  pickup: string;
+  status: OrderStatus;
+  reservedUntil: string;
+  paidAt: string | null;
+  readyAt: string | null;
+  collectedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type SpottedPost = {
+  id: string;
+  profileId: string;
+  sayariId: string;
+  displayName: string;
+  caption: string;
+  neighbourhood: string;
+  lane: string;
+  imageUrl: string;
+  railId: string | null;
+  votes: number;
+  featured: boolean;
+  createdAt: string;
+};
+
+export type SpottedVote = {
+  id: string;
+  postId: string;
+  profileId: string;
+  createdAt: string;
+};
+
+export type NotificationKind =
+  | "ORDER"
+  | "REWEAR"
+  | "RAIL"
+  | "SPOTTED"
+  | "SYSTEM";
+
+export type AppNotification = {
+  id: string;
+  profileId: string;
+  kind: NotificationKind;
+  title: string;
+  body: string;
+  href: string | null;
+  readAt: string | null;
+  createdAt: string;
+};
+
 export type StoreData = {
   profiles: Profile[];
   closetItems: ClosetItem[];
@@ -129,6 +246,12 @@ export type StoreData = {
   sessions: SessionRecord[];
   rail: RailPair[];
   findRequests: FindRequest[];
+  rewear: RewearSubmission[];
+  creditLedger: CreditEvent[];
+  orders: Order[];
+  spotted: SpottedPost[];
+  spottedVotes: SpottedVote[];
+  notifications: AppNotification[];
 };
 
 /** Public profile payload — never includes phone in full on the client if we can help it. */
@@ -147,14 +270,19 @@ export type PublicIdentity = {
   foundingNumber: number;
   foundingTier: string;
   points: number;
+  creditKes: number;
   phoneVerified: boolean;
   closetCount: number;
   wishlistCount: number;
+  unreadNotifications: number;
 };
 
 export type IdentityPayload = {
   profile: PublicIdentity;
   closet: ClosetItem[];
   wishlist: WishlistItem[];
+  rewear: RewearSubmission[];
+  orders: Order[];
+  notifications: AppNotification[];
   insight: string;
 };

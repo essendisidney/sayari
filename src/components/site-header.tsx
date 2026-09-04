@@ -25,17 +25,20 @@ export async function SiteHeader() {
             <Logo variant="mark" className="h-11 w-auto sm:h-12" priority />
           </Link>
           <nav className="flex items-center gap-5 font-mono text-[10px] font-bold uppercase tracking-[0.16em] sm:gap-7">
-            <Link href="/#rail" className="hidden hover:text-nairobi sm:inline">
+            <Link href="/rail" className="hidden hover:text-nairobi sm:inline">
               The Rail
             </Link>
-            <Link href="/find" className="hidden hover:text-nairobi md:inline">
-              Find
+            <Link href="/shoeholics" className="hidden hover:text-nairobi md:inline">
+              Shoeholics
+            </Link>
+            <Link href="/drops" className="hidden hover:text-nairobi lg:inline">
+              Drops
             </Link>
             <Link
-              href="/#rewear"
-              className="hidden hover:text-nairobi lg:inline"
+              href="/find"
+              className="hidden hover:text-nairobi xl:inline"
             >
-              ReWear
+              Find
             </Link>
             {profile ? (
               <Link href="/id">{profile.sayariId}</Link>

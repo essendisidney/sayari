@@ -1,0 +1,24 @@
+{
+  "name": "Sayari",
+  "short_name": "Sayari",
+  "description": "Found in Nairobi. Worn everywhere. Nairobi's thrifted shoe rail.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F2EEE5",
+  "theme_color": "#171717",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "/sayari-mark.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/sayari-mark.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

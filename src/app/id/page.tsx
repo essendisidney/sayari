@@ -1,3 +1,4 @@
+import { ActivityFeed } from "@/components/activity-feed";
 import { IdentityDesk } from "@/components/identity-desk";
 import { RailCard } from "@/components/rail-card";
 import { getCurrentIdentity } from "@/lib/auth";
@@ -23,16 +24,30 @@ export default async function IdPage() {
         <section>
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
+              <p className="sayari-label">Activity</p>
+              <h2 className="mt-2 font-display text-4xl uppercase tracking-wide">
+                Your Sayari feed
+              </h2>
+            </div>
+          </div>
+          <div className="mt-6">
+            <ActivityFeed initial={identity.notifications} />
+          </div>
+        </section>
+
+        <section>
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
               <p className="sayari-label">Live rail</p>
               <h2 className="mt-2 font-display text-4xl uppercase tracking-wide">
                 Size {identity.profile.shoeSize} for you
               </h2>
             </div>
             <Link
-              href="/find"
+              href="/rail"
               className="font-mono text-[11px] font-bold uppercase tracking-[0.14em] hover:text-nairobi"
             >
-              Ask WhatsApp →
+              Full catalog →
             </Link>
           </div>
 

@@ -1,6 +1,7 @@
-import { GrabPairButton } from "@/components/grab-pair-button";
+import { CheckoutPanel } from "@/components/checkout-panel";
 import { RailCard } from "@/components/rail-card";
-import { getRailPair, listRail } from "@/lib/store";
+import { getCurrentProfile } from "@/lib/auth";
+import { getRailPair, listOrders, listRail } from "@/lib/store";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -15,6 +16,17 @@ export default async function RailPairPage({ params }: Props) {
   const { id } = await params;
   const pair = await getRailPair(id);
   if (!pair) notFound();
+
+  const profile = await getCurrentProfile();
+  const existingOrder = profile
+    ? (await listOrders(profile.id)).find(
+        (row) =>
+          row.railId === pair.id &&
+          (row.status === "RESERVED" ||
+            row.status === "PAID" ||
+            row.status === "READY"),
+      ) ?? null
+    : null;
 
   const related = (await listRail({ size: pair.size }))
     .filter((row) => row.id !== pair.id)
@@ -60,7 +72,7 @@ export default async function RailPairPage({ params }: Props) {
                       : ""
                 }`}
               >
-                {pair.status}
+                {pair.status === "SOLD" ? "GONE" : pair.status}
               </span>
             </div>
 
@@ -69,25 +81,50 @@ export default async function RailPairPage({ params }: Props) {
             </h1>
             <p className="mt-2 text-xl text-muted">{pair.model}</p>
 
-            <dl className="mt-8 grid grid-cols-2 gap-4 border border-ink bg-bone p-5 font-mono text-[11px] uppercase tracking-[0.12em] sm:grid-cols-3">
-              <Meta label="Size" value={String(pair.size)} />
-              <Meta label="Grade" value={pair.gradeScore} />
-              <Meta label="Found" value={pair.found} />
-              <Meta label="Lane" value={pair.category} />
-              <Meta label="Last seen" value={pair.lastSeen} />
-              <Meta label="Pair" value={pair.id} />
-            </dl>
+            {pair.status === "SOLD" ? (
+              <p className="mt-8 font-mono text-[12px] uppercase tracking-[0.16em] text-muted">
+                #{pair.id} found a new home.
+              </p>
+            ) : (
+              <dl className="mt-8 grid grid-cols-2 gap-4 border border-ink bg-bone p-5 font-mono text-[11px] uppercase tracking-[0.12em] sm:grid-cols-3">
+                <Meta label="Size" value={String(pair.size)} />
+                <Meta label="Grade" value={pair.gradeScore} />
+                <Meta label="Found" value={pair.found} />
+                <Meta label="Lane" value={pair.category} />
+                <Meta label="Last seen" value={pair.lastSeen} />
+                <Meta label="Pair" value={`#${pair.id}`} />
+              </dl>
+            )}
 
             <p className="mt-6 max-w-md text-sm leading-7 text-muted">
               {pair.story}
             </p>
 
-            <p className="mt-4 font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-nairobi">
-              One pair only · No restock
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              {pair.status !== "SOLD" && (
+                <>
+                  <span className="price-sticker !rotate-0">{pair.price}</span>
+                  <span className="stamp !rotate-0">One pair only</span>
+                  <span className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-muted">
+                    No restock
+                  </span>
+                </>
+              )}
+            </div>
+
+            <p className="mt-4 font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-nairobi">
+              {pair.status === "SOLD"
+                ? "Gone from the rail"
+                : `Found — ${pair.found}`}
             </p>
 
             <div className="mt-8">
-              <GrabPairButton pair={pair} />
+              <CheckoutPanel
+                pair={pair}
+                creditKes={profile?.creditKes ?? 0}
+                signedIn={Boolean(profile)}
+                existingOrder={existingOrder}
+              />
             </div>
 
             <Link

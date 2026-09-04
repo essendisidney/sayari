@@ -4,7 +4,10 @@ import { RAIL_SEED } from "@/lib/lookbook";
 export type RailFilter = {
   size?: number | null;
   budgetMaxKes?: number | null;
+  budgetMinKes?: number | null;
   category?: string | null;
+  found?: string | null;
+  query?: string | null;
   status?: RailPair["status"] | "AVAILABLE" | null;
 };
 
@@ -14,6 +17,14 @@ export function scoreRailMatch(
   filter: RailFilter,
 ): number {
   if (pair.status === "SOLD") return -1;
+  if (filter.status === "AVAILABLE" && pair.status !== "FOUND") return -1;
+  if (
+    filter.status &&
+    filter.status !== "AVAILABLE" &&
+    pair.status !== filter.status
+  ) {
+    return -1;
+  }
   if (filter.size != null && pair.size !== filter.size) return -1;
 
   let score = 10;
@@ -23,6 +34,22 @@ export function scoreRailMatch(
     if (pair.priceKes > filter.budgetMaxKes) return -1;
     const headroom = filter.budgetMaxKes - pair.priceKes;
     score += Math.min(8, Math.floor(headroom / 1000));
+  }
+  if (filter.budgetMinKes != null && filter.budgetMinKes > 0) {
+    if (pair.priceKes < filter.budgetMinKes) return -1;
+  }
+
+  if (filter.found) {
+    if (pair.found.toLowerCase() !== filter.found.toLowerCase()) return -1;
+    score += 6;
+  }
+
+  if (filter.query?.trim()) {
+    const q = filter.query.trim().toLowerCase();
+    const hay =
+      `${pair.brand} ${pair.model} ${pair.found} ${pair.category} ${pair.id}`.toLowerCase();
+    if (!hay.includes(q)) return -1;
+    score += 15;
   }
 
   if (filter.category && filter.category !== "Anything") {
