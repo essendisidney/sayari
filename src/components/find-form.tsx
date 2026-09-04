@@ -161,10 +161,30 @@ export function FindForm({
           </div>
 
           {matches.length === 0 ? (
-            <p className="text-sm leading-6 text-muted">
-              No exact pair right now. WhatsApp us anyway — we hunt and ping you
-              when it lands.
-            </p>
+            <div className="space-y-4 border border-dashed border-ink/40 bg-paper p-5">
+              <p className="text-sm leading-6 text-muted">
+                Hakuna exact match right now. Arm a Size Watch — we ping you
+                when it lands. Gone is gone.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href={`/watch?size=${size}&budget=${budgetMaxKes}&category=${encodeURIComponent(category)}&query=${encodeURIComponent(notes)}`}
+                  className="sayari-btn-tag"
+                >
+                  Watch this brief →
+                </Link>
+                {whatsappUrl ? (
+                  <a
+                    href={whatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="sayari-btn-ghost"
+                  >
+                    WhatsApp anyway
+                  </a>
+                ) : null}
+              </div>
+            </div>
           ) : (
             <ul className="divide-y divide-ink/15 border border-ink bg-bone">
               {matches.map((pair) => (

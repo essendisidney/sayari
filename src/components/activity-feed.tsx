@@ -28,9 +28,18 @@ export function ActivityFeed({ initial }: { initial: AppNotification[] }) {
 
   if (notes.length === 0) {
     return (
-      <p className="text-sm text-muted">
-        Quiet for now. When your size lands or an order moves, it shows up here.
-      </p>
+      <div className="space-y-3">
+        <p className="text-sm text-muted">
+          Quiet for now. When your size lands or an order moves, it shows up
+          here.
+        </p>
+        <Link
+          href="/watch"
+          className="font-mono text-[11px] font-bold uppercase tracking-[0.14em] text-nairobi hover:underline"
+        >
+          Arm Size Watch →
+        </Link>
+      </div>
     );
   }
 

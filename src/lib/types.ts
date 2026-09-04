@@ -65,6 +65,18 @@ export type WishlistItem = {
   createdAt: string;
 };
 
+/** Armed alert: ping when a matching pair hits the rail. */
+export type SizeWatch = {
+  id: string;
+  profileId: string;
+  size: number;
+  category: string | null;
+  budgetMaxKes: number | null;
+  query: string | null;
+  active: boolean;
+  createdAt: string;
+};
+
 export type PointEvent = {
   id: string;
   profileId: string;
@@ -223,6 +235,7 @@ export type NotificationKind =
   | "ORDER"
   | "REWEAR"
   | "RAIL"
+  | "WATCH"
   | "SPOTTED"
   | "SYSTEM";
 
@@ -241,6 +254,7 @@ export type StoreData = {
   profiles: Profile[];
   closetItems: ClosetItem[];
   wishlistItems: WishlistItem[];
+  sizeWatches: SizeWatch[];
   ledger: PointEvent[];
   otps: OtpRecord[];
   sessions: SessionRecord[];
@@ -281,6 +295,7 @@ export type IdentityPayload = {
   profile: PublicIdentity;
   closet: ClosetItem[];
   wishlist: WishlistItem[];
+  watches: SizeWatch[];
   rewear: RewearSubmission[];
   orders: Order[];
   notifications: AppNotification[];

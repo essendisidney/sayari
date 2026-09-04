@@ -29,6 +29,12 @@ export default async function IdPage() {
                 Your Sayari feed
               </h2>
             </div>
+            <Link
+              href="/watch"
+              className="sayari-btn-tag !px-3 !py-2"
+            >
+              Size Watch
+            </Link>
           </div>
           <div className="mt-6">
             <ActivityFeed initial={identity.notifications} />
@@ -54,8 +60,12 @@ export default async function IdPage() {
           {forYou.length === 0 ? (
             <p className="mt-6 text-sm text-muted">
               Hakuna size {identity.profile.shoeSize} right now.{" "}
+              <Link href="/watch" className="underline hover:text-nairobi">
+                Arm Size Watch
+              </Link>{" "}
+              or{" "}
               <Link href="/find" className="underline">
-                Tell Sayari what you want
+                tell Sayari what you want
               </Link>
               .
             </p>

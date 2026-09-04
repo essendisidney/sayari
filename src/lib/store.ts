@@ -14,6 +14,10 @@ import {
 import { filterRail, formatLastSeen, seedRailIfEmpty } from "@/lib/rail";
 import { MARKET_IMAGE } from "@/lib/lookbook";
 import {
+  matchesSizeWatch,
+  wishlistHitsPair,
+} from "@/lib/size-watch";
+import {
   estimateRewear,
   formatKes,
   nextRailId,
@@ -36,6 +40,7 @@ import type {
   Profile,
   RailPair,
   RewearSubmission,
+  SizeWatch,
   SpottedPost,
   StoreData,
   WishlistItem,
@@ -52,6 +57,7 @@ const emptyStore = (): StoreData => ({
   profiles: [],
   closetItems: [],
   wishlistItems: [],
+  sizeWatches: [],
   ledger: [],
   otps: [],
   sessions: [],
@@ -107,6 +113,7 @@ function hydrateStore(parsed: Partial<StoreData>): StoreData {
     notifications: Array.isArray(parsed.notifications)
       ? parsed.notifications
       : [],
+    sizeWatches: Array.isArray(parsed.sizeWatches) ? parsed.sizeWatches : [],
   };
   for (const profile of store.profiles) {
     if (typeof profile.creditKes !== "number") profile.creditKes = 0;
@@ -332,13 +339,45 @@ function pushNote(
 }
 
 function notifySizeWatchers(store: StoreData, pair: RailPair) {
-  for (const profile of store.profiles) {
-    if (profile.shoeSize !== pair.size) continue;
-    if (!profile.wantsRecommendations) continue;
-    pushNote(store, profile.id, {
-      kind: "RAIL",
+  const notified = new Set<string>();
+
+  for (const watch of store.sizeWatches) {
+    if (!matchesSizeWatch(pair, watch)) continue;
+    if (notified.has(watch.profileId)) continue;
+    notified.add(watch.profileId);
+    const detail = [
+      watch.query ? `"${watch.query}"` : null,
+      watch.category && watch.category !== "Anything" ? watch.category : null,
+    ]
+      .filter(Boolean)
+      .join(" · ");
+    pushNote(store, watch.profileId, {
+      kind: "WATCH",
       title: `Size ${pair.size} just landed`,
-      body: `${pair.brand} ${pair.model} · ${pair.price} · Found ${pair.found}`,
+      body: `${pair.brand} ${pair.model} · ${pair.price} · Found — ${pair.found}${
+        detail ? ` · Watch: ${detail}` : ""
+      }`,
+      href: `/rail/${pair.id}`,
+    });
+  }
+
+  for (const profile of store.profiles) {
+    if (notified.has(profile.id)) continue;
+    if (profile.shoeSize !== pair.size) continue;
+
+    const wishes = store.wishlistItems.filter(
+      (row) => row.profileId === profile.id,
+    );
+    const wishHit = wishlistHitsPair(pair, wishes);
+    if (!profile.wantsRecommendations && !wishHit) continue;
+
+    notified.add(profile.id);
+    pushNote(store, profile.id, {
+      kind: wishHit ? "WATCH" : "RAIL",
+      title: `Size ${pair.size} just landed`,
+      body: `${pair.brand} ${pair.model} · ${pair.price} · Found — ${pair.found}${
+        wishHit ? " · Matched your wishlist" : ""
+      }`,
       href: `/rail/${pair.id}`,
     });
   }
@@ -546,9 +585,110 @@ export async function removeWishlistItem(profileId: string, itemId: string) {
   });
 }
 
+export async function listSizeWatches(profileId: string): Promise<SizeWatch[]> {
+  return readStore((store) =>
+    store.sizeWatches
+      .filter((row) => row.profileId === profileId)
+      .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt)),
+  );
+}
+
+export async function createSizeWatch(input: {
+  profileId: string;
+  size: number;
+  category?: string | null;
+  budgetMaxKes?: number | null;
+  query?: string | null;
+}): Promise<SizeWatch> {
+  return writeStore((store) => {
+    const profile = store.profiles.find((row) => row.id === input.profileId);
+    if (!profile) throw new Error("Profile not found.");
+
+    const query = input.query?.trim() || null;
+    const category = input.category ?? null;
+    const budgetMaxKes = input.budgetMaxKes ?? null;
+
+    const existing = store.sizeWatches.find(
+      (row) =>
+        row.profileId === input.profileId &&
+        row.active &&
+        row.size === input.size &&
+        (row.category ?? null) === category &&
+        (row.budgetMaxKes ?? null) === budgetMaxKes &&
+        (row.query ?? null) === query,
+    );
+    if (existing) return existing;
+
+    const watch: SizeWatch = {
+      id: crypto.randomUUID(),
+      profileId: input.profileId,
+      size: input.size,
+      category,
+      budgetMaxKes,
+      query,
+      active: true,
+      createdAt: new Date().toISOString(),
+    };
+    store.sizeWatches.push(watch);
+    profile.wantsRecommendations = true;
+    profile.updatedAt = new Date().toISOString();
+    return watch;
+  });
+}
+
+export async function deactivateSizeWatch(
+  profileId: string,
+  watchId: string,
+): Promise<boolean> {
+  return writeStore((store) => {
+    const watch = store.sizeWatches.find(
+      (row) => row.id === watchId && row.profileId === profileId,
+    );
+    if (!watch) return false;
+    watch.active = false;
+    return true;
+  });
+}
+
+export async function countWatchersForSize(size: number): Promise<number> {
+  return readStore((store) => {
+    const ids = new Set<string>();
+    for (const watch of store.sizeWatches) {
+      if (watch.active && watch.size === size) ids.add(watch.profileId);
+    }
+    for (const profile of store.profiles) {
+      if (profile.shoeSize === size && profile.wantsRecommendations) {
+        ids.add(profile.id);
+      }
+    }
+    return ids.size;
+  });
+}
+
+export async function watcherCountsBySize(): Promise<Record<number, number>> {
+  return readStore((store) => {
+    const counts: Record<number, number> = {};
+    const seen = new Set<string>();
+    const bump = (size: number, profileId: string) => {
+      const key = `${size}:${profileId}`;
+      if (seen.has(key)) return;
+      seen.add(key);
+      counts[size] = (counts[size] ?? 0) + 1;
+    };
+    for (const watch of store.sizeWatches) {
+      if (watch.active) bump(watch.size, watch.profileId);
+    }
+    for (const profile of store.profiles) {
+      if (profile.wantsRecommendations) bump(profile.shoeSize, profile.id);
+    }
+    return counts;
+  });
+}
+
 export async function identityFor(profile: Profile) {
   const closet = await listCloset(profile.id);
   const wishlist = await listWishlist(profile.id);
+  const watches = await listSizeWatches(profile.id);
   const rewear = await listRewear(profile.id);
   const orders = await listOrders(profile.id);
   const notifications = await listNotifications(profile.id);
@@ -557,6 +697,7 @@ export async function identityFor(profile: Profile) {
     profile: toPublicIdentity(profile, closet.length, wishlist.length, unread),
     closet,
     wishlist,
+    watches,
     rewear,
     orders,
     notifications,

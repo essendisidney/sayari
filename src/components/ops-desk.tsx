@@ -9,6 +9,7 @@ type DeskData = {
   rail: RailPair[];
   orders: Order[];
   spotted: SpottedPost[];
+  watchers?: Record<number, number>;
 };
 
 export function OpsDesk() {
@@ -285,6 +286,9 @@ export function OpsDesk() {
         <h2 className="font-display text-3xl uppercase tracking-wide">
           Add to rail
         </h2>
+        <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
+          Size {size} watchers: {data?.watchers?.[Number(size)] ?? 0}
+        </p>
         <div className="grid gap-3 sm:grid-cols-2">
           <input
             className="sayari-input"

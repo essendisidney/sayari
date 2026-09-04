@@ -78,3 +78,42 @@ export function nearPlaceMessage(place: string): string {
     "Sayari finds the pair.",
   ].join("\n");
 }
+
+export function armSizeWatchMessage(input: {
+  size: number;
+  category?: string | null;
+  budgetMaxKes?: number | null;
+  query?: string | null;
+}): string {
+  const lines = [
+    `SIZE WATCH · ${input.size}`,
+    "Ping me when this lands on the rail.",
+  ];
+  if (input.category && input.category !== "Anything") {
+    lines.push(`Lane: ${input.category}`);
+  }
+  if (input.budgetMaxKes) {
+    lines.push(`Budget up to KES ${input.budgetMaxKes.toLocaleString("en-KE")}`);
+  }
+  if (input.query?.trim()) lines.push(`Looking for: ${input.query.trim()}`);
+  lines.push("", "Don't sleep on it.");
+  return lines.join("\n");
+}
+
+export function sizeLandedMessage(pair: {
+  id: string;
+  brand: string;
+  model: string;
+  size: number;
+  price: string;
+  found: string;
+}): string {
+  return [
+    `SIZE ${pair.size} JUST LANDED.`,
+    `RAIL #${pair.id}`,
+    `${pair.brand} ${pair.model}`,
+    `${pair.price} · FOUND — ${pair.found}`,
+    "",
+    "One pair only. Don't sleep.",
+  ].join("\n");
+}

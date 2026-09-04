@@ -10,6 +10,7 @@ import {
   listSpotted,
   markRailSold,
   updateOrderStatus,
+  watcherCountsBySize,
 } from "@/lib/store";
 import { COMMUNITIES, KENYAN_SIZES } from "@/lib/taxonomy";
 import { NextResponse } from "next/server";
@@ -20,17 +21,19 @@ export async function GET() {
   if (!(await isOpsAuthed())) {
     return NextResponse.json({ error: "Ops lock." }, { status: 401 });
   }
-  const [rewear, rail, orders, spotted] = await Promise.all([
+  const [rewear, rail, orders, spotted, watchers] = await Promise.all([
     listAllRewear(),
     listRail(),
     listAllOrders(),
     listSpotted(),
+    watcherCountsBySize(),
   ]);
   return NextResponse.json({
     rewear,
     rail: rail.slice(0, 40),
     orders: orders.slice(0, 40),
     spotted: spotted.slice(0, 30),
+    watchers,
   });
 }
 

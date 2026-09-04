@@ -1,11 +1,15 @@
-import { getCurrentProfile } from "@/lib/auth";
+import { getCurrentIdentity, getCurrentProfile } from "@/lib/auth";
 import { TICKER } from "@/lib/lookbook";
 import { Logo } from "@/components/logo";
 import Link from "next/link";
 
 export async function SiteHeader() {
-  const profile = await getCurrentProfile();
+  const [profile, identity] = await Promise.all([
+    getCurrentProfile(),
+    getCurrentIdentity(),
+  ]);
   const loop = [...TICKER, ...TICKER];
+  const unread = identity?.profile.unreadNotifications ?? 0;
 
   return (
     <header className="sticky top-0 z-40 bg-paper/95 backdrop-blur-sm">
@@ -33,20 +37,19 @@ export async function SiteHeader() {
             <Link href="/rail" className="hover:text-nairobi">
               Rail
             </Link>
-            <Link href="/found" className="hover:text-nairobi">
+            <Link href="/found" className="hidden hover:text-nairobi sm:inline">
               Found
             </Link>
-            <Link href="/find" className="hidden hover:text-nairobi sm:inline">
+            <Link href="/watch" className="relative hover:text-nairobi">
+              Watch
+              {unread > 0 ? (
+                <span className="absolute -right-3 -top-2 bg-nairobi px-1 font-mono text-[8px] text-bone">
+                  {unread > 9 ? "9+" : unread}
+                </span>
+              ) : null}
+            </Link>
+            <Link href="/find" className="hidden hover:text-nairobi md:inline">
               Find
-            </Link>
-            <Link
-              href="/shoeholics"
-              className="hidden hover:text-nairobi md:inline"
-            >
-              Shoeholics
-            </Link>
-            <Link href="/rewear" className="hidden hover:text-nairobi lg:inline">
-              ReWear
             </Link>
             {profile ? (
               <Link href="/id" className="hover:text-nairobi">
