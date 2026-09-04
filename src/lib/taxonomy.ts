@@ -29,9 +29,9 @@ export const WEEKLY_RITUALS = [
   { day: "Tue", name: "Rate This Fit" },
   { day: "Wed", name: "Sneaker Battle" },
   { day: "Thu", name: "What's In Your Closet?" },
-  { day: "Fri", name: "Weekend Drop" },
+  { day: "Fri", name: "Weekend Drop · Westlands" },
   { day: "Sat", name: "Show Us Your Kicks" },
-  { day: "Sun", name: "What's Coming Next Week?" },
+  { day: "Sun", name: "WhatsApp Restock" },
 ] as const;
 
 export const KENYAN_SIZES = [

@@ -8,7 +8,7 @@ export async function SiteHeader() {
   const loop = [...TICKER, ...TICKER];
 
   return (
-    <header className="sticky top-0 z-40 bg-paper">
+    <header className="sticky top-0 z-40 bg-paper/95 backdrop-blur-sm">
       <div className="overflow-hidden border-b border-line bg-night text-bone">
         <div className="marquee-track flex w-max gap-10 whitespace-nowrap py-1.5 font-mono text-[10px] uppercase tracking-[0.2em]">
           {loop.map((item, index) => (
@@ -24,25 +24,33 @@ export async function SiteHeader() {
           <Link href="/" aria-label="Sayari home" className="shrink-0">
             <Logo variant="mark" className="h-12 w-auto sm:h-14" priority />
           </Link>
-          <nav className="flex items-center gap-6 font-mono text-[10px] uppercase tracking-[0.2em] sm:gap-8">
-            <Link href="/#rail" className="hidden text-tobacco hover:text-ink sm:inline">
+          <nav className="flex items-center gap-5 font-mono text-[10px] uppercase tracking-[0.2em] sm:gap-8">
+            <Link
+              href="/#rail"
+              className="hidden text-tobacco transition hover:text-laterite sm:inline"
+            >
               The rail
             </Link>
-            <Link href="/#rewear" className="hidden text-tobacco hover:text-ink md:inline">
+            <Link
+              href="/#rewear"
+              className="hidden text-tobacco transition hover:text-laterite md:inline"
+            >
               ReWear
             </Link>
             {profile ? (
-              <Link href="/id">{profile.sayariId}</Link>
+              <Link href="/id" className="hover:text-laterite">
+                {profile.sayariId}
+              </Link>
             ) : (
               <>
                 <Link
                   href="/id/login"
-                  className="hidden text-tobacco hover:text-ink sm:inline"
+                  className="hidden text-tobacco transition hover:text-laterite sm:inline"
                 >
                   Sign in
                 </Link>
-                <Link href="/join" className="sayari-btn !px-4 !py-2.5">
-                  Join the 500
+                <Link href="/join" className="sayari-btn !bg-laterite !px-4 !py-2.5">
+                  Join
                 </Link>
               </>
             )}

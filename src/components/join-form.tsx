@@ -229,7 +229,7 @@ export function JoinForm() {
           <Field label="Where do you shop today?">
             <input
               required
-              placeholder="Westlands, CBD, Instagram, Jumia…"
+              placeholder="Westlands, CBD, Ngong Road, Instagram…"
               value={form.currentShops}
               onChange={(event) =>
                 setForm((current) => ({
@@ -304,7 +304,7 @@ export function JoinForm() {
           disabled={pending || (step === 1 && form.categories.length === 0)}
           className="sayari-btn"
         >
-          {pending ? "Saving…" : step < 2 ? "Continue" : "Join Shoeholics"}
+          {pending ? "Saving…" : step < 2 ? "Continue" : "Karibu Shoeholics"}
         </button>
       </div>
     </form>

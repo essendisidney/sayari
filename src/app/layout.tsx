@@ -22,9 +22,9 @@ const ticket = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Sayari Archive — Where every foot finds its perfect fit",
+  title: "Sayari — Nairobi's home for people who love shoes",
   description:
-    "Nairobi's premium thrift and new-in shoe house. Closet, identity, ReWear.",
+    "New-in and ReWear footwear in Nairobi. Closet, Sayari ID, WhatsApp stylist. Join the first 500.",
   icons: {
     icon: "/sayari-mark.png",
   },
