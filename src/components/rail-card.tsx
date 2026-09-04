@@ -1,10 +1,10 @@
-import type { RailPair } from "@/lib/lookbook";
+import type { RailPair } from "@/lib/types";
 import Image from "next/image";
 import Link from "next/link";
 
 export function RailCard({ pair }: { pair: RailPair }) {
   return (
-    <Link href="/join" className="rail-tag block overflow-hidden">
+    <Link href={`/rail/${pair.id}`} className="rail-tag block overflow-hidden">
       <div className="flex items-center justify-between border-b border-ink/15 px-3 py-2">
         <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em]">
           Sayari · Rail #{pair.id}

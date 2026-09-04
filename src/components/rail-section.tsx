@@ -1,7 +1,7 @@
 "use client";
 
 import { RailCard } from "@/components/rail-card";
-import type { RailPair } from "@/lib/lookbook";
+import type { RailPair } from "@/lib/types";
 import { KENYAN_SIZES } from "@/lib/taxonomy";
 import { useMemo, useState } from "react";
 

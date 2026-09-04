@@ -1,17 +1,4 @@
-export type RailPair = {
-  id: string;
-  brand: string;
-  model: string;
-  size: number;
-  grade: string;
-  gradeScore: string;
-  found: string;
-  price: string;
-  priceKes: number;
-  lastSeen: string;
-  image: string;
-  status: "FOUND" | "HOLD" | "SOLD";
-};
+import type { RailPair } from "@/lib/types";
 
 export const HERO_IMAGE =
   "https://images.unsplash.com/photo-1460353581641-37baddab0fa2?auto=format&fit=crop&w=2000&q=80";
@@ -25,12 +12,16 @@ export const REWEAR_IMAGE =
 export const SPOTTED_IMAGE =
   "https://images.unsplash.com/photo-1556906781-9a412961c28c?auto=format&fit=crop&w=1400&q=80";
 
-export const RAIL: RailPair[] = [
+/** Static seed — copied into data/store.json on first read. */
+export type RailSeed = Omit<RailPair, "heldUntil" | "heldByProfileId">;
+
+export const RAIL_SEED: RailSeed[] = [
   {
     id: "NBO-024",
     brand: "Nike",
     model: "Air Max",
     size: 42,
+    category: "Sneakers",
     grade: "Very Good",
     gradeScore: "8.5/10",
     found: "Kilimani",
@@ -38,6 +29,8 @@ export const RAIL: RailPair[] = [
     priceKes: 4500,
     lastSeen: "04.09.26",
     status: "FOUND",
+    story:
+      "Pulled from a Kilimani clear-out. Cushion still soft. One pair only.",
     image:
       "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1200&q=80",
   },
@@ -46,6 +39,7 @@ export const RAIL: RailPair[] = [
     brand: "Nike",
     model: "Dunk",
     size: 42,
+    category: "Sneakers",
     grade: "Grade A",
     gradeScore: "9/10",
     found: "CBD",
@@ -53,6 +47,7 @@ export const RAIL: RailPair[] = [
     priceKes: 6500,
     lastSeen: "04.09.26",
     status: "FOUND",
+    story: "CBD find. Clean toebox. Looks barely worn for Nairobi miles.",
     image:
       "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=1200&q=80",
   },
@@ -61,6 +56,7 @@ export const RAIL: RailPair[] = [
     brand: "Adidas",
     model: "Samba",
     size: 41,
+    category: "Sneakers",
     grade: "Good",
     gradeScore: "7.5/10",
     found: "Eastlands",
@@ -68,6 +64,7 @@ export const RAIL: RailPair[] = [
     priceKes: 3800,
     lastSeen: "03.09.26",
     status: "FOUND",
+    story: "Eastlands classic. Gum sole with honest wear. Ready to walk.",
     image:
       "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=1200&q=80",
   },
@@ -76,6 +73,7 @@ export const RAIL: RailPair[] = [
     brand: "Bata",
     model: "Oxford",
     size: 43,
+    category: "Office",
     grade: "Excellent",
     gradeScore: "9.5/10",
     found: "Upper Hill",
@@ -83,6 +81,7 @@ export const RAIL: RailPair[] = [
     priceKes: 2800,
     lastSeen: "04.09.26",
     status: "FOUND",
+    story: "Upper Hill desk pair. Polish-ready. Quiet flex for Monday.",
     image:
       "https://images.unsplash.com/photo-1614252369475-531eba835eb1?auto=format&fit=crop&w=1200&q=80",
   },
@@ -91,6 +90,7 @@ export const RAIL: RailPair[] = [
     brand: "Clarks",
     model: "Desert Boot",
     size: 39,
+    category: "Boots",
     grade: "Very Good",
     gradeScore: "8/10",
     found: "Lavington",
@@ -98,6 +98,7 @@ export const RAIL: RailPair[] = [
     priceKes: 5200,
     lastSeen: "02.09.26",
     status: "HOLD",
+    story: "Lavington hand-off. Crepe sole intact. On hold until evening.",
     image:
       "https://images.unsplash.com/photo-1608256246200-53e635b5b65f?auto=format&fit=crop&w=1200&q=80",
   },
@@ -106,6 +107,7 @@ export const RAIL: RailPair[] = [
     brand: "Adidas",
     model: "Campus",
     size: 41,
+    category: "Sneakers",
     grade: "Very Good",
     gradeScore: "8/10",
     found: "Ngong Road",
@@ -113,6 +115,7 @@ export const RAIL: RailPair[] = [
     priceKes: 4200,
     lastSeen: "04.09.26",
     status: "FOUND",
+    story: "Ngong Road stall energy. Suede soft, shape solid.",
     image:
       "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&fit=crop&w=1200&q=80",
   },
@@ -121,6 +124,7 @@ export const RAIL: RailPair[] = [
     brand: "New Balance",
     model: "550",
     size: 44,
+    category: "Sneakers",
     grade: "New in",
     gradeScore: "10/10",
     found: "Westlands",
@@ -128,6 +132,7 @@ export const RAIL: RailPair[] = [
     priceKes: 9800,
     lastSeen: "04.09.26",
     status: "FOUND",
+    story: "Westlands drop. Basically untouched. Archive-level condition.",
     image:
       "https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&w=1200&q=80",
   },
@@ -136,6 +141,7 @@ export const RAIL: RailPair[] = [
     brand: "Puma",
     model: "Suede",
     size: 40,
+    category: "Casual",
     grade: "Good",
     gradeScore: "7/10",
     found: "South B",
@@ -143,10 +149,14 @@ export const RAIL: RailPair[] = [
     priceKes: 3000,
     lastSeen: "01.09.26",
     status: "FOUND",
+    story: "South B weekend pair. Lived-in suede. Honest thrift price.",
     image:
       "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?auto=format&fit=crop&w=1200&q=80",
   },
 ];
+
+/** @deprecated Prefer listRail() — kept for static fallbacks. */
+export const RAIL = RAIL_SEED;
 
 export const FOUND_PLACES = [
   "Kilimani",
@@ -176,4 +186,14 @@ export const SHOEHOLIC_VOTES = [
   { title: "Best Fit", pair: "Samba · Eastlands", vote: "RAIL #008" },
   { title: "Best Bargain", pair: "Bata Oxford · 2.8K", vote: "RAIL #031" },
   { title: "Unexpected", pair: "Clarks · Lavington", vote: "RAIL #022" },
+] as const;
+
+export const FIND_CATEGORIES = [
+  "Anything",
+  "Sneakers",
+  "Office",
+  "Casual",
+  "Boots",
+  "Streetwear",
+  "Sports",
 ] as const;

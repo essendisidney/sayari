@@ -4,12 +4,12 @@ import { getFounderCount } from "@/lib/founders";
 import {
   FOUND_PLACES,
   HERO_IMAGE,
-  RAIL,
   REWEAR_IMAGE,
   SHOEHOLIC_VOTES,
   SPOTTED_IMAGE,
   STREET_IMAGE,
 } from "@/lib/lookbook";
+import { listRail } from "@/lib/store";
 import { FOUNDING_CAP } from "@/lib/taxonomy";
 import Image from "next/image";
 import Link from "next/link";
@@ -17,7 +17,7 @@ import Link from "next/link";
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const count = await getFounderCount();
+  const [count, pairs] = await Promise.all([getFounderCount(), listRail()]);
   const remaining = Math.max(FOUNDING_CAP - count, 0);
 
   return (
@@ -89,7 +89,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <RailSection pairs={RAIL} />
+      <RailSection pairs={pairs} />
 
       <section id="whatsapp" className="border-b border-ink">
         <div className="mx-auto grid max-w-[1440px] lg:grid-cols-2">
@@ -107,8 +107,8 @@ export default async function Home() {
               Niko na size 42.
             </h2>
             <p className="mt-4 max-w-md text-sm leading-7 text-muted">
-              Tell Sayari what you&apos;re looking for. We check the rail. If
-              it&apos;s there, we hold it. No app. No catalogue scroll.
+              Tell Sayari what you&apos;re looking for. We check the live rail.
+              If it&apos;s there, we hold it. No app. No catalogue scroll.
             </p>
             <div className="mt-8 space-y-0 border border-ink bg-paper">
               {[
@@ -129,7 +129,7 @@ export default async function Home() {
                 </div>
               ))}
             </div>
-            <Link href="/join" className="sayari-btn mt-8 self-start">
+            <Link href="/find" className="sayari-btn mt-8 self-start">
               Sayari finds the pair
             </Link>
           </div>

@@ -87,6 +87,39 @@ export type SessionRecord = {
   createdAt: string;
 };
 
+export type RailStatus = "FOUND" | "HOLD" | "SOLD";
+
+export type RailPair = {
+  id: string;
+  brand: string;
+  model: string;
+  size: number;
+  category: string;
+  grade: string;
+  gradeScore: string;
+  found: string;
+  price: string;
+  priceKes: number;
+  lastSeen: string;
+  image: string;
+  status: RailStatus;
+  story: string;
+  heldUntil: string | null;
+  heldByProfileId: string | null;
+};
+
+export type FindRequest = {
+  id: string;
+  profileId: string | null;
+  size: number;
+  budgetMaxKes: number;
+  category: string;
+  colours: string;
+  notes: string;
+  matchIds: string[];
+  createdAt: string;
+};
+
 export type StoreData = {
   profiles: Profile[];
   closetItems: ClosetItem[];
@@ -94,6 +127,8 @@ export type StoreData = {
   ledger: PointEvent[];
   otps: OtpRecord[];
   sessions: SessionRecord[];
+  rail: RailPair[];
+  findRequests: FindRequest[];
 };
 
 /** Public profile payload — never includes phone in full on the client if we can help it. */

@@ -59,6 +59,7 @@ export const POINT_AWARDS = {
   closet: 15,
   wishlist: 10,
   gender: 10,
+  find: 5,
 } as const;
 
 export const FOUNDING_CAP = 500;

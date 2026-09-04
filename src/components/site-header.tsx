@@ -28,17 +28,14 @@ export async function SiteHeader() {
             <Link href="/#rail" className="hidden hover:text-nairobi sm:inline">
               The Rail
             </Link>
-            <Link
-              href="/#rewear"
-              className="hidden hover:text-nairobi md:inline"
-            >
-              ReWear
+            <Link href="/find" className="hidden hover:text-nairobi md:inline">
+              Find
             </Link>
             <Link
-              href="/#shoeholics"
+              href="/#rewear"
               className="hidden hover:text-nairobi lg:inline"
             >
-              Shoeholics
+              ReWear
             </Link>
             {profile ? (
               <Link href="/id">{profile.sayariId}</Link>

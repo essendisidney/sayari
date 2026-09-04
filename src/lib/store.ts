@@ -1,14 +1,17 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { filterRail, formatLastSeen, seedRailIfEmpty } from "@/lib/rail";
 import { foundingTier, POINT_AWARDS, sayariIdFromNumber } from "@/lib/taxonomy";
 import { normalizeKenyanPhone } from "@/lib/phone";
 import type {
   ClosetItem,
   ClosetUsage,
+  FindRequest,
   FoundingMemberInput,
   GenderPreference,
   PointEvent,
   Profile,
+  RailPair,
   StoreData,
   WishlistItem,
 } from "@/lib/types";
@@ -16,6 +19,7 @@ import type {
 const dataDir = path.join(process.cwd(), "data");
 const storeFile = path.join(dataDir, "store.json");
 const legacyFoundersFile = path.join(dataDir, "founders.json");
+const HOLD_HOURS = 6;
 
 const emptyStore = (): StoreData => ({
   profiles: [],
@@ -24,6 +28,8 @@ const emptyStore = (): StoreData => ({
   ledger: [],
   otps: [],
   sessions: [],
+  rail: [],
+  findRequests: [],
 });
 
 let queue: Promise<unknown> = Promise.resolve();
@@ -58,12 +64,21 @@ async function loadStore(): Promise<StoreData> {
   try {
     const raw = await readFile(storeFile, "utf8");
     const parsed = JSON.parse(raw) as Partial<StoreData>;
-    const store: StoreData = { ...emptyStore(), ...parsed };
+    const store: StoreData = {
+      ...emptyStore(),
+      ...parsed,
+      rail: Array.isArray(parsed.rail) ? parsed.rail : [],
+      findRequests: Array.isArray(parsed.findRequests) ? parsed.findRequests : [],
+    };
+    const before = store.rail.length;
+    store.rail = seedRailIfEmpty(store.rail);
     await migrateLegacyFounders(store);
     pruneExpired(store);
+    if (before === 0 && store.rail.length > 0) await saveStore(store);
     return store;
   } catch {
     const store = emptyStore();
+    store.rail = seedRailIfEmpty(store.rail);
     await migrateLegacyFounders(store);
     return store;
   }
@@ -118,6 +133,18 @@ function pruneExpired(store: StoreData) {
   const now = Date.now();
   store.otps = store.otps.filter((row) => Date.parse(row.expiresAt) > now);
   store.sessions = store.sessions.filter((row) => Date.parse(row.expiresAt) > now);
+  for (const pair of store.rail) {
+    if (
+      pair.status === "HOLD" &&
+      pair.heldUntil &&
+      Date.parse(pair.heldUntil) <= now
+    ) {
+      pair.status = "FOUND";
+      pair.heldUntil = null;
+      pair.heldByProfileId = null;
+      pair.lastSeen = formatLastSeen();
+    }
+  }
 }
 
 function award(
@@ -392,3 +419,85 @@ export function closetInsight(profile: Profile, closet: ClosetItem[]): string {
   const top = [...counts.entries()].sort((a, b) => b[1] - a[1])[0];
   return `Size ${profile.shoeSize}. ${closet.length} pair${closet.length === 1 ? "" : "s"}. Mostly ${top[0].toLowerCase()}. ${profile.budgetBand}.`;
 }
+
+export async function listRail(filter: {
+  size?: number | null;
+  budgetMaxKes?: number | null;
+  category?: string | null;
+} = {}): Promise<RailPair[]> {
+  return readStore((store) => filterRail(store.rail, filter));
+}
+
+export async function getRailPair(id: string): Promise<RailPair | null> {
+  const key = id.trim().toUpperCase().replace(/^#/, "");
+  return readStore((store) => {
+    const exact = store.rail.find((row) => row.id.toUpperCase() === key);
+    if (exact) return exact;
+    if (/^\d+$/.test(key)) {
+      return (
+        store.rail.find((row) => row.id.toUpperCase() === `NBO-${key.padStart(3, "0")}`) ??
+        null
+      );
+    }
+    return null;
+  });
+}
+
+export async function holdRailPair(
+  id: string,
+  profileId: string | null,
+): Promise<RailPair | null> {
+  return writeStore((store) => {
+    const pair = store.rail.find((row) => row.id.toUpperCase() === id.toUpperCase());
+    if (!pair || pair.status === "SOLD") return null;
+    if (pair.status === "HOLD" && pair.heldByProfileId && pair.heldByProfileId !== profileId) {
+      throw new Error("That pair is already on hold.");
+    }
+    pair.status = "HOLD";
+    pair.heldByProfileId = profileId;
+    pair.heldUntil = new Date(Date.now() + HOLD_HOURS * 60 * 60 * 1000).toISOString();
+    pair.lastSeen = formatLastSeen();
+    return pair;
+  });
+}
+
+export async function createFindRequest(input: {
+  profileId: string | null;
+  size: number;
+  budgetMaxKes: number;
+  category: string;
+  colours: string;
+  notes: string;
+}): Promise<{ request: FindRequest; matches: RailPair[] }> {
+  return writeStore((store) => {
+    const matches = filterRail(store.rail, {
+      size: input.size,
+      budgetMaxKes: input.budgetMaxKes,
+      category: input.category,
+    }).slice(0, 5);
+
+    const request: FindRequest = {
+      id: crypto.randomUUID(),
+      profileId: input.profileId,
+      size: input.size,
+      budgetMaxKes: input.budgetMaxKes,
+      category: input.category,
+      colours: input.colours,
+      notes: input.notes,
+      matchIds: matches.map((row) => row.id),
+      createdAt: new Date().toISOString(),
+    };
+    store.findRequests.push(request);
+
+    if (input.profileId) {
+      const profile = store.profiles.find((row) => row.id === input.profileId);
+      if (profile) {
+        award(store, profile, `find:${request.id}`, POINT_AWARDS.find);
+        profile.updatedAt = new Date().toISOString();
+      }
+    }
+
+    return { request, matches };
+  });
+}
+

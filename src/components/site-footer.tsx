@@ -34,7 +34,7 @@ export function SiteFooter() {
               </Link>
             </li>
             <li>
-              <Link href="/#whatsapp" className="hover:text-tag">
+              <Link href="/find" className="hover:text-tag">
                 Niko na size…
               </Link>
             </li>
