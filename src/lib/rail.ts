@@ -76,15 +76,25 @@ export function filterRail(pairs: RailPair[], filter: RailFilter): RailPair[] {
 }
 
 export function seedRailIfEmpty(rail: RailPair[]): RailPair[] {
-  if (rail.length > 0) return rail;
-  return RAIL_SEED.map((row) => ({
-    ...row,
-    heldUntil:
-      row.status === "HOLD"
-        ? new Date(Date.now() + 6 * 60 * 60 * 1000).toISOString()
-        : null,
-    heldByProfileId: null,
-  }));
+  if (rail.length === 0) {
+    return RAIL_SEED.map((row) => ({
+      ...row,
+      heldUntil:
+        row.status === "HOLD"
+          ? new Date(Date.now() + 6 * 60 * 60 * 1000).toISOString()
+          : null,
+      heldByProfileId: null,
+    }));
+  }
+
+  // Keep demo inventory photography in sync with the lookbook.
+  const seedById = new Map(RAIL_SEED.map((row) => [row.id, row]));
+  return rail.map((pair) => {
+    const seed = seedById.get(pair.id);
+    if (!seed) return pair;
+    if (pair.image === seed.image) return pair;
+    return { ...pair, image: seed.image };
+  });
 }
 
 export function formatLastSeen(date = new Date()): string {

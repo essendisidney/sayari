@@ -1,16 +1,16 @@
 import type { RailPair } from "@/lib/types";
 
-export const HERO_IMAGE =
-  "https://images.unsplash.com/photo-1460353581641-37baddab0fa2?auto=format&fit=crop&w=2000&q=80";
-
-export const STREET_IMAGE =
-  "https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=1600&q=80";
-
-export const REWEAR_IMAGE =
-  "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1600&q=80";
-
-export const SPOTTED_IMAGE =
-  "https://images.unsplash.com/photo-1556906781-9a412961c28c?auto=format&fit=crop&w=1400&q=80";
+/**
+ * Local lookbook — Nairobi street + thrift-market photography
+ * (Unsplash: Dwayne Joe / Nairobi street; market stall thrift displays).
+ * Replace with Sayari's own shoots when ready — keep paths under /lookbook.
+ */
+export const HERO_IMAGE = "/lookbook/nike-nairobi.jpg";
+export const STREET_IMAGE = "/lookbook/street-fit-nairobi.jpg";
+export const REWEAR_IMAGE = "/lookbook/market-shoes.jpg";
+export const SPOTTED_IMAGE = "/lookbook/spotted-nairobi.jpg";
+export const CULTURE_IMAGE = "/lookbook/shoeholics.jpg";
+export const MARKET_IMAGE = "/lookbook/market-stalls.jpg";
 
 /** Static seed — copied into data/store.json on first read. */
 export type RailSeed = Omit<RailPair, "heldUntil" | "heldByProfileId">;
@@ -31,8 +31,7 @@ export const RAIL_SEED: RailSeed[] = [
     status: "FOUND",
     story:
       "Pulled from a Kilimani clear-out. Cushion still soft. One pair only.",
-    image:
-      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1200&q=80",
+    image: "/lookbook/nike-nairobi.jpg",
   },
   {
     id: "NBO-041",
@@ -48,8 +47,7 @@ export const RAIL_SEED: RailSeed[] = [
     lastSeen: "04.09.26",
     status: "FOUND",
     story: "CBD find. Clean toebox. Looks barely worn for Nairobi miles.",
-    image:
-      "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=1200&q=80",
+    image: "/lookbook/street-fit-nairobi.jpg",
   },
   {
     id: "NBO-008",
@@ -65,8 +63,7 @@ export const RAIL_SEED: RailSeed[] = [
     lastSeen: "03.09.26",
     status: "FOUND",
     story: "Eastlands classic. Gum sole with honest wear. Ready to walk.",
-    image:
-      "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=1200&q=80",
+    image: "/lookbook/market-shoes.jpg",
   },
   {
     id: "NBO-031",
@@ -82,8 +79,7 @@ export const RAIL_SEED: RailSeed[] = [
     lastSeen: "04.09.26",
     status: "FOUND",
     story: "Upper Hill desk pair. Polish-ready. Quiet flex for Monday.",
-    image:
-      "https://images.unsplash.com/photo-1614252369475-531eba835eb1?auto=format&fit=crop&w=1200&q=80",
+    image: "/lookbook/storefront.jpg",
   },
   {
     id: "NBO-022",
@@ -99,8 +95,7 @@ export const RAIL_SEED: RailSeed[] = [
     lastSeen: "02.09.26",
     status: "HOLD",
     story: "Lavington hand-off. Crepe sole intact. On hold until evening.",
-    image:
-      "https://images.unsplash.com/photo-1608256246200-53e635b5b65f?auto=format&fit=crop&w=1200&q=80",
+    image: "/lookbook/urban-shoe.jpg",
   },
   {
     id: "NBO-014",
@@ -116,8 +111,7 @@ export const RAIL_SEED: RailSeed[] = [
     lastSeen: "04.09.26",
     status: "FOUND",
     story: "Ngong Road stall energy. Suede soft, shape solid.",
-    image:
-      "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&fit=crop&w=1200&q=80",
+    image: "/lookbook/market-stalls.jpg",
   },
   {
     id: "NBO-003",
@@ -133,8 +127,7 @@ export const RAIL_SEED: RailSeed[] = [
     lastSeen: "04.09.26",
     status: "FOUND",
     story: "Westlands drop. Basically untouched. Archive-level condition.",
-    image:
-      "https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&w=1200&q=80",
+    image: "/lookbook/shoeholics.jpg",
   },
   {
     id: "NBO-019",
@@ -150,8 +143,7 @@ export const RAIL_SEED: RailSeed[] = [
     lastSeen: "01.09.26",
     status: "FOUND",
     story: "South B weekend pair. Lived-in suede. Honest thrift price.",
-    image:
-      "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?auto=format&fit=crop&w=1200&q=80",
+    image: "/lookbook/spotted-nairobi.jpg",
   },
 ];
 

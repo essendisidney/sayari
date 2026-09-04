@@ -21,8 +21,7 @@ export const SPOTTED_SEED = [
     caption: "Dunk from the CBD rail. Clean with jeans.",
     neighbourhood: "CBD",
     lane: "Best Fit",
-    imageUrl:
-      "https://images.unsplash.com/photo-1556906781-9a412961c28c?auto=format&fit=crop&w=1200&q=80",
+    imageUrl: "/lookbook/street-fit-nairobi.jpg",
     railId: "NBO-041",
     votes: 18,
     featured: true,
@@ -36,8 +35,7 @@ export const SPOTTED_SEED = [
     caption: "Samba hunt · Eastlands energy.",
     neighbourhood: "Eastlands",
     lane: "Best Find",
-    imageUrl:
-      "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=1200&q=80",
+    imageUrl: "/lookbook/market-shoes.jpg",
     railId: "NBO-008",
     votes: 14,
     featured: false,
@@ -51,8 +49,7 @@ export const SPOTTED_SEED = [
     caption: "Bata Oxford for 2.8K. Office flex.",
     neighbourhood: "Upper Hill",
     lane: "Best Bargain",
-    imageUrl:
-      "https://images.unsplash.com/photo-1614252369475-531eba835eb1?auto=format&fit=crop&w=1200&q=80",
+    imageUrl: "/lookbook/storefront.jpg",
     railId: "NBO-031",
     votes: 11,
     featured: false,
@@ -66,8 +63,7 @@ export const SPOTTED_SEED = [
     caption: "Clarks in Lavington. Did not see that coming.",
     neighbourhood: "Lavington",
     lane: "Unexpected",
-    imageUrl:
-      "https://images.unsplash.com/photo-1608256246200-53e635b5b65f?auto=format&fit=crop&w=1200&q=80",
+    imageUrl: "/lookbook/urban-shoe.jpg",
     railId: "NBO-022",
     votes: 9,
     featured: false,

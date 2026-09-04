@@ -12,6 +12,7 @@ import {
   writeRemoteStore,
 } from "@/lib/persist";
 import { filterRail, formatLastSeen, seedRailIfEmpty } from "@/lib/rail";
+import { MARKET_IMAGE } from "@/lib/lookbook";
 import {
   estimateRewear,
   formatKes,
@@ -120,14 +121,22 @@ async function loadStore(): Promise<StoreData> {
       const store = hydrateStore(remote);
       const before = store.rail.length;
       const spottedBefore = store.spotted.length;
+      const railBefore = store.rail.map((pair) => pair.image).join("|");
+      const spottedUrlsBefore = store.spotted.map((row) => row.imageUrl).join("|");
       store.rail = seedRailIfEmpty(store.rail);
       if (store.spotted.length === 0) {
         store.spotted = SPOTTED_SEED.map((row) => ({ ...row }));
+      } else {
+        store.spotted = refreshSpottedLookbook(store.spotted);
       }
       pruneExpired(store);
+      const lookbookChanged =
+        railBefore !== store.rail.map((pair) => pair.image).join("|") ||
+        spottedUrlsBefore !== store.spotted.map((row) => row.imageUrl).join("|");
       if (
         (before === 0 && store.rail.length > 0) ||
-        (spottedBefore === 0 && store.spotted.length > 0)
+        (spottedBefore === 0 && store.spotted.length > 0) ||
+        lookbookChanged
       ) {
         await saveStore(store);
       }
@@ -146,15 +155,23 @@ async function loadStore(): Promise<StoreData> {
     const store = hydrateStore(parsed);
     const before = store.rail.length;
     const spottedBefore = store.spotted.length;
+    const railBefore = store.rail.map((pair) => pair.image).join("|");
+    const spottedUrlsBefore = store.spotted.map((row) => row.imageUrl).join("|");
     store.rail = seedRailIfEmpty(store.rail);
     if (store.spotted.length === 0) {
       store.spotted = SPOTTED_SEED.map((row) => ({ ...row }));
+    } else {
+      store.spotted = refreshSpottedLookbook(store.spotted);
     }
     await migrateLegacyFounders(store);
     pruneExpired(store);
+    const lookbookChanged =
+      railBefore !== store.rail.map((pair) => pair.image).join("|") ||
+      spottedUrlsBefore !== store.spotted.map((row) => row.imageUrl).join("|");
     if (
       (before === 0 && store.rail.length > 0) ||
-      (spottedBefore === 0 && store.spotted.length > 0)
+      (spottedBefore === 0 && store.spotted.length > 0) ||
+      lookbookChanged
     ) {
       await saveStore(store);
     }
@@ -178,6 +195,19 @@ async function saveStore(store: StoreData) {
   }
   await mkdir(dataDir, { recursive: true });
   await writeFile(storeFile, JSON.stringify(store, null, 2), "utf8");
+}
+
+function refreshSpottedLookbook<T extends { id: string; imageUrl: string }>(
+  posts: T[],
+): T[] {
+  const seedById = new Map<string, string>(
+    SPOTTED_SEED.map((row) => [row.id, row.imageUrl]),
+  );
+  return posts.map((post) => {
+    const next = seedById.get(post.id);
+    if (!next || post.imageUrl === next) return post;
+    return { ...post, imageUrl: next };
+  });
 }
 
 async function migrateLegacyFounders(store: StoreData) {
@@ -838,7 +868,7 @@ export async function confirmRewearIntake(
       lastSeen: formatLastSeen(),
       image:
         submission.imageUrl ||
-        "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=1200&q=80",
+        submission.imageUrl || MARKET_IMAGE,
       status: "FOUND",
       story: `ReWear from ${profile.sayariId}. ${submission.notes || "Pre-loved, checked, back on the rail."}`,
       heldUntil: null,
