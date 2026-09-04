@@ -19,15 +19,15 @@ export default async function WelcomePage({
       <div className="mx-auto grid max-w-[1440px] gap-16 px-5 py-16 sm:px-10 lg:grid-cols-2 lg:py-24">
         <div>
           <span className="stamp">Admitted</span>
-          <h1 className="mt-8 font-display text-6xl italic leading-none">
+          <h1 className="mt-8 font-display text-6xl uppercase leading-none tracking-wide">
             {sayariId ?? "Welcome."}
           </h1>
-          <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.18em] text-tobacco">
-            {valid ? `Lot ${String(n).padStart(4, "0")}` : null} · {tier}
+          <p className="mt-4 font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-nairobi">
+            {valid ? `Rail lot ${String(n).padStart(4, "0")}` : null} · {tier}
           </p>
           <p className="mt-6 max-w-md text-sm leading-7 text-muted">
-            Verify the number. The closet opens. Your pair — new or ReWear —
-            now has a name behind it.
+            Verify the number. The closet opens. Your pair — found or ReWear —
+            now has a place on the rail.
           </p>
           <div className="mt-10">
             <Logo variant="lockup" className="h-32 w-auto" />

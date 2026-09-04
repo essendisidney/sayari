@@ -285,7 +285,7 @@ export function JoinForm() {
         </div>
       )}
 
-      {error ? <p className="mt-4 text-sm text-oxblood">{error}</p> : null}
+      {error ? <p className="mt-4 text-sm text-nairobi">{error}</p> : null}
 
       <div className="mt-8 flex items-center justify-between">
         {step > 0 ? (

@@ -121,13 +121,13 @@ export function OtpForm({ phone = "", lockPhone = false, joinHint = false }: Pro
       ) : null}
 
       {devCode ? (
-        <p className="mt-4 border border-dashed border-tobacco px-3 py-2 font-mono text-sm">
+        <p className="mt-4 border border-dashed border-ink/30 bg-tag/30 px-3 py-2 font-mono text-sm">
           Floor code: <span className="tracking-[0.2em]">{devCode}</span>
         </p>
       ) : null}
 
       {error ? (
-        <p className="mt-4 text-sm text-oxblood">
+        <p className="mt-4 text-sm text-nairobi">
           {error}{" "}
           {error.includes("Join") ? (
             <Link href="/join" className="underline">

@@ -19,11 +19,11 @@ export default async function LoginPage({
       <div className="mx-auto max-w-[560px] px-5 py-16 sm:px-8 lg:py-24">
         <Logo variant="mark" className="h-12 w-auto" />
         <p className="sayari-label mt-12">WhatsApp number</p>
-        <h1 className="mt-3 font-display text-5xl italic leading-tight">
+        <h1 className="mt-3 font-display text-5xl uppercase tracking-wide">
           Fungua Sayari ID.
         </h1>
         <p className="mt-4 text-sm leading-7 text-muted">
-          Same number you joined with. Closet, wishlist, and credit live here.
+          Same number you joined with. Closet, wishlist, ReWear credit.
         </p>
         <div className="mt-10">
           <OtpForm phone={phone} lockPhone={Boolean(phone)} joinHint />

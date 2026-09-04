@@ -40,12 +40,12 @@ export function IdentityDesk({ initial }: { initial: IdentityPayload }) {
 
   return (
     <div className="space-y-12">
-      <section className="ticket p-6 sm:p-8">
+      <section className="rail-tag p-6 sm:p-8">
         <div className="flex items-start justify-between gap-4">
           <p className="sayari-label">Sayari ID</p>
           <span className="stamp">Member</span>
         </div>
-        <h1 className="mt-4 font-display text-5xl italic tracking-tight">
+        <h1 className="mt-4 font-display text-5xl uppercase tracking-wide">
           {profile.sayariId}
         </h1>
         <p className="mt-2 text-lg">{profile.displayName}</p>
@@ -201,7 +201,7 @@ export function IdentityDesk({ initial }: { initial: IdentityPayload }) {
         </ul>
       </section>
 
-      {error ? <p className="text-sm text-oxblood">{error}</p> : null}
+      {error ? <p className="text-sm text-nairobi">{error}</p> : null}
 
       <form
         onSubmit={(event) => {

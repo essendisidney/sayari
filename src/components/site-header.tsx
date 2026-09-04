@@ -9,47 +9,48 @@ export async function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 bg-paper/95 backdrop-blur-sm">
-      <div className="overflow-hidden border-b border-line bg-night text-bone">
-        <div className="marquee-track flex w-max gap-10 whitespace-nowrap py-1.5 font-mono text-[10px] uppercase tracking-[0.2em]">
+      <div className="tape overflow-hidden text-ink">
+        <div className="marquee-track flex w-max gap-8 whitespace-nowrap py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.16em]">
           {loop.map((item, index) => (
-            <span key={`${item}-${index}`} className="flex items-center gap-10">
+            <span key={`${item}-${index}`} className="flex items-center gap-8">
               {item}
-              <span className="text-brass">/</span>
+              <span className="text-nairobi">●</span>
             </span>
           ))}
         </div>
       </div>
-      <div className="border-b border-line">
-        <div className="mx-auto flex h-[78px] max-w-[1440px] items-center justify-between px-5 sm:px-8">
+      <div className="border-b border-ink">
+        <div className="mx-auto flex h-[72px] max-w-[1440px] items-center justify-between px-5 sm:px-8">
           <Link href="/" aria-label="Sayari home" className="shrink-0">
-            <Logo variant="mark" className="h-12 w-auto sm:h-14" priority />
+            <Logo variant="mark" className="h-11 w-auto sm:h-12" priority />
           </Link>
-          <nav className="flex items-center gap-5 font-mono text-[10px] uppercase tracking-[0.2em] sm:gap-8">
-            <Link
-              href="/#rail"
-              className="hidden text-tobacco transition hover:text-laterite sm:inline"
-            >
-              The rail
+          <nav className="flex items-center gap-5 font-mono text-[10px] font-bold uppercase tracking-[0.16em] sm:gap-7">
+            <Link href="/#rail" className="hidden hover:text-nairobi sm:inline">
+              The Rail
             </Link>
             <Link
               href="/#rewear"
-              className="hidden text-tobacco transition hover:text-laterite md:inline"
+              className="hidden hover:text-nairobi md:inline"
             >
               ReWear
             </Link>
+            <Link
+              href="/#shoeholics"
+              className="hidden hover:text-nairobi lg:inline"
+            >
+              Shoeholics
+            </Link>
             {profile ? (
-              <Link href="/id" className="hover:text-laterite">
-                {profile.sayariId}
-              </Link>
+              <Link href="/id">{profile.sayariId}</Link>
             ) : (
               <>
                 <Link
                   href="/id/login"
-                  className="hidden text-tobacco transition hover:text-laterite sm:inline"
+                  className="hidden text-muted hover:text-ink sm:inline"
                 >
                   Sign in
                 </Link>
-                <Link href="/join" className="sayari-btn !bg-laterite !px-4 !py-2.5">
+                <Link href="/join" className="sayari-btn-tag !px-3 !py-2">
                   Join
                 </Link>
               </>

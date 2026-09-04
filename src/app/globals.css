@@ -1,19 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  /* Nairobi dusk: asphalt, laterite, dust, brass */
-  --paper: #f0e6d4;
-  --ink: #14110e;
-  --muted: #6e6256;
-  --line: #d2c2a8;
-  --chip: #e4d5bb;
-  --night: #17130f;
-  --bone: #f6edd9;
-  --laterite: #b84a22;
-  --tobacco: #6e3d24;
-  --oxblood: #8a2f22;
-  --brass: #b8923f;
-  --dust: #c4b193;
+  --paper: #f2eee5;
+  --ink: #171717;
+  --muted: #5c574f;
+  --line: #d4cec2;
+  --chip: #e8e2d6;
+  --night: #171717;
+  --bone: #f7f3ea;
+  --nairobi: #d94b32;
+  --tag: #d7a928;
+  --market: #315c4b;
+  --tape: #c9b896;
 }
 
 @theme inline {
@@ -24,13 +22,12 @@
   --color-chip: var(--chip);
   --color-night: var(--night);
   --color-bone: var(--bone);
-  --color-laterite: var(--laterite);
-  --color-tobacco: var(--tobacco);
-  --color-oxblood: var(--oxblood);
-  --color-brass: var(--brass);
-  --color-dust: var(--dust);
+  --color-nairobi: var(--nairobi);
+  --color-tag: var(--tag);
+  --color-market: var(--market);
+  --color-tape: var(--tape);
   --font-sans: var(--font-ui);
-  --font-display: var(--font-serif);
+  --font-display: var(--font-rail);
   --font-mono: var(--font-ticket);
 }
 
@@ -44,27 +41,25 @@ html {
 
 body {
   position: relative;
-  background:
-    radial-gradient(ellipse 80% 50% at 10% 0%, rgba(184, 74, 34, 0.08), transparent 55%),
-    radial-gradient(ellipse 60% 40% at 100% 100%, rgba(184, 146, 63, 0.07), transparent 50%),
-    var(--paper);
+  background: var(--paper);
   color: var(--ink);
-  font-family: var(--font-sans), "Gill Sans", sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
 }
 
+/* packing-paper grain */
 body::before {
   content: "";
   pointer-events: none;
   position: fixed;
   inset: 0;
-  z-index: 80;
-  opacity: 0.07;
+  z-index: 70;
+  opacity: 0.055;
   mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 ::selection {
-  background: var(--laterite);
+  background: var(--nairobi);
   color: var(--bone);
 }
 
@@ -72,9 +67,9 @@ body::before {
   display: block;
   font-family: var(--font-mono), ui-monospace, monospace;
   font-size: 10px;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--laterite);
+  color: var(--muted);
 }
 
 .sayari-input {
@@ -87,7 +82,7 @@ body::before {
 }
 
 .sayari-input:focus {
-  border-bottom-color: var(--laterite);
+  border-bottom-color: var(--ink);
 }
 
 .sayari-btn {
@@ -97,15 +92,16 @@ body::before {
   background: var(--ink);
   color: var(--bone);
   padding: 14px 22px;
+  font-family: var(--font-mono), ui-monospace, monospace;
   font-size: 11px;
   font-weight: 500;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .sayari-btn:hover {
-  background: var(--laterite);
+  background: var(--nairobi);
   transform: translateY(-1px);
 }
 
@@ -118,34 +114,116 @@ body::before {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--ink);
-  padding: 13px 22px;
+  border: 1.5px solid var(--ink);
+  padding: 12px 20px;
+  font-family: var(--font-mono), ui-monospace, monospace;
   font-size: 11px;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  transition: border-color 0.25s ease, color 0.25s ease;
 }
 
-.sayari-btn-ghost:hover {
-  border-color: var(--laterite);
-  color: var(--laterite);
+.sayari-btn-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--tag);
+  color: var(--ink);
+  padding: 14px 22px;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  box-shadow: 2px 2px 0 var(--ink);
+  transition: transform 0.15s ease;
+}
+
+.sayari-btn-tag:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--ink);
 }
 
 .ticket {
-  border: 1px dashed var(--tobacco);
+  border: 1.5px dashed var(--ink);
   background: var(--bone);
 }
 
 .stamp {
   display: inline-block;
-  border: 1.5px solid var(--laterite);
-  color: var(--laterite);
+  border: 2px solid var(--nairobi);
+  color: var(--nairobi);
   font-family: var(--font-mono), ui-monospace, monospace;
   font-size: 10px;
-  letter-spacing: 0.16em;
+  font-weight: 600;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  padding: 5px 8px;
-  transform: rotate(-4deg);
+  padding: 4px 8px;
+  transform: rotate(-3deg);
+}
+
+.stamp-market {
+  border-color: var(--market);
+  color: var(--market);
+}
+
+.stamp-sold {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.price-sticker {
+  display: inline-block;
+  background: var(--tag);
+  color: var(--ink);
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 6px 10px;
+  box-shadow: 2px 2px 0 rgba(23, 23, 23, 0.25);
+  transform: rotate(1.5deg);
+}
+
+.rail-tag {
+  background: var(--bone);
+  border: 1.5px solid var(--ink);
+  box-shadow: 3px 3px 0 rgba(23, 23, 23, 0.12);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.3s ease;
+}
+
+.rail-tag:hover {
+  transform: translateY(-3px) rotate(-0.4deg);
+  box-shadow: 5px 5px 0 rgba(23, 23, 23, 0.14);
+}
+
+.tape {
+  background: var(--tape);
+  border-top: 1px dashed rgba(23, 23, 23, 0.2);
+  border-bottom: 1px dashed rgba(23, 23, 23, 0.2);
+}
+
+.size-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  height: 44px;
+  border: 1.5px solid var(--ink);
+  background: transparent;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.size-chip:hover {
+  background: var(--chip);
+}
+
+.size-chip[data-active="true"] {
+  background: var(--ink);
+  color: var(--bone);
 }
 
 @keyframes sayari-marquee {
@@ -160,7 +238,7 @@ body::before {
 @keyframes sayari-rise {
   from {
     opacity: 0;
-    transform: translateY(18px);
+    transform: translateY(16px);
   }
   to {
     opacity: 1;
@@ -168,51 +246,22 @@ body::before {
   }
 }
 
-@keyframes sayari-fade {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 .marquee-track {
-  animation: sayari-marquee 42s linear infinite;
+  animation: sayari-marquee 40s linear infinite;
 }
 
 .rise {
-  animation: sayari-rise 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: sayari-rise 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .rise-delay-1 {
-  animation-delay: 0.12s;
+  animation-delay: 0.1s;
 }
 
 .rise-delay-2 {
-  animation-delay: 0.28s;
+  animation-delay: 0.22s;
 }
 
 .rise-delay-3 {
-  animation-delay: 0.42s;
-}
-
-.hero-image {
-  animation: sayari-fade 1.1s ease both;
-}
-
-.rail-card {
-  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.rail-card:hover {
-  transform: translateY(-4px);
-}
-
-.rail-card img {
-  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.rail-card:hover img {
-  transform: scale(1.04);
+  animation-delay: 0.34s;
 }
