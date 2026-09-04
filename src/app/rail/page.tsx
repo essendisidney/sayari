@@ -32,8 +32,8 @@ export default async function RailPage({ searchParams }: Props) {
                 : "You never know what you'll find."}
             </h1>
             <p className="mt-3 max-w-lg text-sm leading-7 text-muted">
-              One pair. One story. One new home. Discovery, not endless
-              inventory.
+              Gone is gone. Don&apos;t sleep on it. Size check → condition →
+              price → hold.
             </p>
           </div>
           <Link href="/find" className="sayari-btn-tag">

@@ -11,16 +11,21 @@ export default async function FindPage() {
     <main className="flex-1">
       <div className="mx-auto grid max-w-[1440px] gap-10 px-5 py-12 sm:px-10 lg:grid-cols-[0.9fr_1.1fr] lg:py-16">
         <div>
-          <p className="sayari-label">WhatsApp stylist</p>
+          <p className="sayari-label">WhatsApp</p>
           <h1 className="mt-3 font-display text-5xl uppercase leading-none tracking-wide sm:text-6xl">
             Niko na size {profile?.shoeSize ?? 42}.
           </h1>
           <p className="mt-5 max-w-md text-sm leading-7 text-muted">
-            Tell Sayari what you&apos;re looking for. We check the live rail,
-            surface matches, then open WhatsApp with the brief ready.
+            Size. Budget. Vibe. Occasion. Say it like you&apos;d text a friend —
+            we check the live rail and open WhatsApp with the brief ready.
           </p>
-          <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.16em] text-muted">
-            No catalogue scroll · No restock · One pair only
+          <ul className="mt-6 space-y-2 font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
+            <li>“Niko na wedding Saturday. Nipee shoe.”</li>
+            <li>“Niko na 3K. Size 41.”</li>
+            <li>“Need black sneakers size 43.”</li>
+          </ul>
+          <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.16em] text-nairobi">
+            One pair only · No restock · Gone is gone
           </p>
           {profile ? (
             <p className="mt-4 text-sm text-muted">

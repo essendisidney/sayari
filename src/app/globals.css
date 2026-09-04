@@ -271,3 +271,36 @@ body::before {
   border: 1.5px solid var(--ink);
   box-shadow: 4px 4px 0 rgba(23, 23, 23, 0.12);
 }
+
+.found-mark {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--nairobi);
+}
+
+a:focus-visible,
+button:focus-visible,
+.sayari-btn:focus-visible,
+.sayari-btn-tag:focus-visible,
+.sayari-btn-ghost:focus-visible,
+.size-chip:focus-visible {
+  outline: 2px solid var(--nairobi);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track,
+  .rise,
+  .rise-delay-1,
+  .rise-delay-2,
+  .rise-delay-3,
+  .rail-tag,
+  .rail-tag:hover {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+}

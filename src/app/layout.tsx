@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Archivo_Black, DM_Sans, Space_Mono } from "next/font/google";
+import { MobileDock } from "@/components/mobile-dock";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import "./globals.css";
@@ -24,7 +25,7 @@ const ticket = Space_Mono({
 export const metadata: Metadata = {
   title: "Sayari — Found in Nairobi. Worn everywhere.",
   description:
-    "Nairobi's curated second-hand fashion marketplace — starting with shoes. One pair. One story. One new home.",
+    "The digital home of Nairobi's thrift shoe culture. Found in Nairobi. Worn everywhere. One pair. One story. One new home.",
   applicationName: "Sayari",
   manifest: "/manifest.webmanifest",
   appleWebApp: {
@@ -44,10 +45,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${ui.variable} ${rail.variable} ${ticket.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-paper text-ink">
+      <body className="flex min-h-full flex-col bg-paper pb-14 text-ink sm:pb-0">
         <SiteHeader />
         {children}
         <SiteFooter />
+        <MobileDock />
       </body>
     </html>
   );

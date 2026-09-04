@@ -15,13 +15,11 @@ export default async function RewearPage() {
         <div className="max-w-2xl">
           <p className="sayari-label">ReWear</p>
           <h1 className="mt-3 font-display text-5xl uppercase leading-none tracking-wide sm:text-6xl">
-            Your old pair.
-            <br />
-            Someone&apos;s new find.
+            Your closet has money in it.
           </h1>
           <p className="mt-5 text-sm leading-7 text-muted">
-            That pair you parked under the bed? Still worth something. Photo →
-            value → credit on Sayari ID → back on the rail.
+            Photograph → estimate → Sayari credit → back on the rail. Found.
+            Checked. Worn again.
           </p>
           <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.16em] text-muted">
             Wear → trade → ReWear · {identity.profile.sayariId}
