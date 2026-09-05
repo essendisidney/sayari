@@ -1,6 +1,7 @@
 import { CheckoutPanel } from "@/components/checkout-panel";
 import { RailCard } from "@/components/rail-card";
 import { getCurrentProfile } from "@/lib/auth";
+import { mpesaIsLive } from "@/lib/commerce";
 import { getRailPair, listOrders, listRail } from "@/lib/store";
 import Image from "next/image";
 import Link from "next/link";
@@ -18,13 +19,15 @@ export default async function RailPairPage({ params }: Props) {
   if (!pair) notFound();
 
   const profile = await getCurrentProfile();
+  const demoPay = !mpesaIsLive();
   const existingOrder = profile
     ? (await listOrders(profile.id)).find(
         (row) =>
           row.railId === pair.id &&
           (row.status === "RESERVED" ||
             row.status === "PAID" ||
-            row.status === "READY"),
+            row.status === "READY" ||
+            row.status === "COLLECTED"),
       ) ?? null
     : null;
 
@@ -134,6 +137,7 @@ export default async function RailPairPage({ params }: Props) {
                 creditKes={profile?.creditKes ?? 0}
                 signedIn={Boolean(profile)}
                 existingOrder={existingOrder}
+                demoPay={demoPay}
               />
             </div>
 
@@ -180,6 +184,7 @@ export default async function RailPairPage({ params }: Props) {
             creditKes={profile?.creditKes ?? 0}
             signedIn={Boolean(profile)}
             existingOrder={existingOrder}
+            demoPay={demoPay}
           />
         </div>
       ) : null}

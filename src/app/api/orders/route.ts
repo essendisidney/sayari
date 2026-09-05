@@ -1,5 +1,5 @@
 import { getCurrentProfile } from "@/lib/auth";
-import { isPickupSpot } from "@/lib/commerce";
+import { isPickupSpot, mpesaIsLive } from "@/lib/commerce";
 import {
   cancelOrder,
   createReservation,
@@ -8,7 +8,12 @@ import {
   listOrders,
   payOrder,
 } from "@/lib/store";
-import { grabPairMessage, whatsappHref } from "@/lib/whatsapp";
+import {
+  orderPaidMessage,
+  orderReadyMessage,
+  orderReservedMessage,
+  whatsappHref,
+} from "@/lib/whatsapp";
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
@@ -18,14 +23,17 @@ export async function GET() {
   if (!profile) {
     return NextResponse.json({ error: "Sign in first." }, { status: 401 });
   }
-  return NextResponse.json({ orders: await listOrders(profile.id) });
+  return NextResponse.json({
+    orders: await listOrders(profile.id),
+    demoPay: !mpesaIsLive(),
+  });
 }
 
 export async function POST(request: Request) {
   const profile = await getCurrentProfile();
   if (!profile) {
     return NextResponse.json(
-      { error: "Sign in to reserve.", login: "/id/login?next=/id" },
+      { error: "Sign in to reserve.", login: "/id/login?next=/orders" },
       { status: 401 },
     );
   }
@@ -43,7 +51,10 @@ export async function POST(request: Request) {
     if (body.action === "reserve") {
       const pickup = String(body.pickup ?? "Westlands");
       if (!isPickupSpot(pickup)) {
-        return NextResponse.json({ error: "Pick a pickup spot." }, { status: 400 });
+        return NextResponse.json(
+          { error: "Pick a pickup spot." },
+          { status: 400 },
+        );
       }
       const order = await createReservation({
         profileId: profile.id,
@@ -54,15 +65,17 @@ export async function POST(request: Request) {
       return NextResponse.json({
         order,
         identity: await identityFor(profile),
+        demoPay: !mpesaIsLive(),
         whatsappUrl: whatsappHref(
-          grabPairMessage({
-            id: order.railId,
+          orderReservedMessage({
+            code: order.code,
+            railId: order.railId,
             brand: order.brand,
             model: order.model,
             size: order.size,
-            price: `KES ${order.priceKes.toLocaleString("en-KE")}`,
-            found: order.pickup,
-          }) + `\nOrder ${order.code} · reserved 6hrs`,
+            pickup: order.pickup,
+            reservedUntil: order.reservedUntil,
+          }),
         ),
       });
     }
@@ -77,6 +90,18 @@ export async function POST(request: Request) {
       return NextResponse.json({
         order,
         identity: await identityFor(profile),
+        demoPay: !mpesaIsLive(),
+        whatsappUrl: whatsappHref(
+          orderPaidMessage({
+            code: order.code,
+            railId: order.railId,
+            brand: order.brand,
+            model: order.model,
+            pickup: order.pickup,
+            mpesaRef: order.mpesaRef,
+            stub: !mpesaIsLive(),
+          }),
+        ),
       });
     }
 
@@ -88,12 +113,47 @@ export async function POST(request: Request) {
       });
     }
 
+    if (body.action === "whatsapp" && body.orderId) {
+      const order = await getOrder(body.orderId);
+      if (!order || order.profileId !== profile.id) {
+        return NextResponse.json({ error: "Order not found." }, { status: 404 });
+      }
+      const message =
+        order.status === "READY"
+          ? orderReadyMessage({
+              code: order.code,
+              brand: order.brand,
+              model: order.model,
+              pickup: order.pickup,
+            })
+          : order.status === "PAID" || order.status === "COLLECTED"
+            ? orderPaidMessage({
+                code: order.code,
+                railId: order.railId,
+                brand: order.brand,
+                model: order.model,
+                pickup: order.pickup,
+                mpesaRef: order.mpesaRef,
+                stub: !mpesaIsLive(),
+              })
+            : orderReservedMessage({
+                code: order.code,
+                railId: order.railId,
+                brand: order.brand,
+                model: order.model,
+                size: order.size,
+                pickup: order.pickup,
+                reservedUntil: order.reservedUntil,
+              });
+      return NextResponse.json({ whatsappUrl: whatsappHref(message) });
+    }
+
     if (body.action === "get" && body.orderId) {
       const order = await getOrder(body.orderId);
       if (!order || order.profileId !== profile.id) {
         return NextResponse.json({ error: "Order not found." }, { status: 404 });
       }
-      return NextResponse.json({ order });
+      return NextResponse.json({ order, demoPay: !mpesaIsLive() });
     }
 
     return NextResponse.json({ error: "Unknown action." }, { status: 400 });

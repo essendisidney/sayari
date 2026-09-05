@@ -117,3 +117,64 @@ export function sizeLandedMessage(pair: {
     "One pair only. Don't sleep.",
   ].join("\n");
 }
+
+export function orderReservedMessage(input: {
+  code: string;
+  railId: string;
+  brand: string;
+  model: string;
+  size: number;
+  pickup: string;
+  reservedUntil: string;
+}): string {
+  const until = new Date(input.reservedUntil).toLocaleTimeString("en-KE", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  return [
+    `HOLD · ${input.code}`,
+    `RAIL #${input.railId} · ${input.brand} ${input.model}`,
+    `Size ${input.size}`,
+    `Pickup: ${input.pickup}`,
+    `Hold till ${until}`,
+    "",
+    "Paying now to lock. One pair only.",
+  ].join("\n");
+}
+
+export function orderPaidMessage(input: {
+  code: string;
+  railId: string;
+  brand: string;
+  model: string;
+  pickup: string;
+  mpesaRef: string | null;
+  stub: boolean;
+}): string {
+  return [
+    `PAID · ${input.code}`,
+    `RAIL #${input.railId} · ${input.brand} ${input.model}`,
+    `Pickup: ${input.pickup}`,
+    input.mpesaRef ? `Ref: ${input.mpesaRef}` : "",
+    input.stub ? "(Demo M-Pesa — live Daraja next)" : "",
+    "",
+    "Ping me when READY for pickup.",
+  ]
+    .filter(Boolean)
+    .join("\n");
+}
+
+export function orderReadyMessage(input: {
+  code: string;
+  brand: string;
+  model: string;
+  pickup: string;
+}): string {
+  return [
+    `READY · ${input.code}`,
+    `${input.brand} ${input.model}`,
+    `Pickup: ${input.pickup}`,
+    "",
+    "Coming through. Sayari ID + order code ready.",
+  ].join("\n");
+}
